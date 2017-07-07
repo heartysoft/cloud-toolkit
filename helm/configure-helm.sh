@@ -4,7 +4,7 @@ function configure_helm {
   set -eo pipefail
 
   CERTIFICATES_LOCATION=/usr/local/certificates
-  KUBE_CA_PEM_FILE=$CERTIFICATES_LOCATION/kube.ca.pem
+  KUBE_CA_PEM_FILE=$CERTIFICATES_LOCATION/kube/kube.ca.pem
 
   if [ ! -f $KUBE_CA_PEM_FILE ]; then
     echo "placing base64 encoded kubernetes pem file in $KUBE_CA_PEM_FILE"
@@ -27,8 +27,8 @@ function configure_helm {
 
   SSL_CA_BUNDLE_FILE=/etc/ssl/certs/ca-certificates.crt
   export HELM_REPO=helmet
-  export HELM_REPO_CRT_FILE=$CERTIFICATES_LOCATION/client.crt
-  export HELM_REPO_KEY_FILE=$CERTIFICATES_LOCATION/client.key
+  export HELM_REPO_CRT_FILE=$CERTIFICATES_LOCATION/helm/client.crt
+  export HELM_REPO_KEY_FILE=$CERTIFICATES_LOCATION/helm/client.key
 
   if [ ! -f $HELM_REPO_CRT_FILE ]; then
     echo "placing base64 encoded helm crt in $HELM_REPO_CRT_FILE"
