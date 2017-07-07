@@ -100,11 +100,13 @@ function publish_chart {
 
   echo "releasing chart for tests from local folder..."
 
-  helm upgrade --install --namespace $KUBE_NAMESPACE --debug $RELEASE_NAME $CHART
+  ts=$(date +%s)
+  test_release_name="$CHART_NAME-test-$ts"
+  helm upgrade --install --namespace $KUBE_NAMESPACE --debug $test_release_name $CHART
 
   echo "testing chart..."
 
-  validate_release $RELEASE_NAME
+  validate_release $test_release_name
 
   EXIT_CODE=$?
 
@@ -114,7 +116,7 @@ function publish_chart {
     EXIT_CODE=$?
   fi
 
-  helm delete --purge $RELEASE_NAME
+  helm delete --purge $test_release_name
 
   return $EXIT_CODE
 }
