@@ -2,6 +2,9 @@
 
 function configure_helm {
   set -eo pipefail
+  
+  #defensive.. kubectl --from-file adds trailing newline
+  KUBE_TOKEN=`echo -n $KUBE_TOKEN` 
 
   CERTIFICATES_LOCATION=/usr/local/certificates
   KUBE_CA_PEM_FILE=$CERTIFICATES_LOCATION/kube/kube.ca.pem
@@ -57,7 +60,8 @@ function export_environment {
   my_env=$1
   export KUBE_CA_PEM=$(eval "echo \$KUBE_CA_PEM_$my_env")
   export KUBE_NAMESPACE=$(eval "echo \$KUBE_NAMESPACE_$my_env")
-  export KUBE_TOKEN=$(eval "echo \$KUBE_TOKEN_$my_env")
+  KUBE_TOKEN_TEMP=$(eval "echo \$KUBE_TOKEN_$my_env")
+  export KUBE_TOKEN=`echo -n $KUBE_TOKEN_TEMP`
   export RELEASE_NAME=$(eval "echo \$RELEASE_NAME_$my_env")
 }
 
