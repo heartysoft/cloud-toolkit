@@ -1,12 +1,11 @@
 #!/bin/sh
 
-function configure_helm {
-  set -eo pipefail
+function configure_kube {
   
   #defensive.. kubectl --from-file adds trailing newline
   KUBE_TOKEN=`echo -n $KUBE_TOKEN` 
 
-  CERTIFICATES_LOCATION=/usr/local/certificates
+  CERTIFICATES_LOCATION=${CERTIFICATES_LOCATION:-"/usr/local/certificates"}
   KUBE_CA_PEM_FILE=$CERTIFICATES_LOCATION/kube/kube.ca.pem
 
   if [ ! -f $KUBE_CA_PEM_FILE ]; then
@@ -25,6 +24,13 @@ function configure_helm {
     kubectl config set-context kube-cluster --cluster=kube-cluster --user kube-user --namespace="$KUBE_NAMESPACE"
     kubectl config use-context kube-cluster
   fi
+}
+
+function configure_helm {
+
+  CERTIFICATES_LOCATION=${CERTIFICATES_LOCATION:-"/usr/local/certificates"}
+
+  configure_kube
 
   echo "setting up helm..."
 
@@ -48,7 +54,6 @@ function configure_helm {
 
   echo ""
 }
-
 
 function export_chart_version {
  export CHART_NAME=$(grep -Po '(?<=name: ).*' "$CHART/Chart.yaml" | head -n 1)
