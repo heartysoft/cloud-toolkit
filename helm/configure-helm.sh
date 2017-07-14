@@ -10,7 +10,7 @@ function configure_kube {
 
   if [ ! -f $KUBE_CA_PEM_FILE ]; then
     echo "placing base64 encoded kubernetes pem file in $KUBE_CA_PEM_FILE"
-    mkdir -p $CERTIFICATES_LOCATION
+    mkdir -p $CERTIFICATES_LOCATION/kube
     echo $KUBE_CA_PEM | base64 -d > $KUBE_CA_PEM_FILE
   fi
 
@@ -41,11 +41,13 @@ function configure_helm {
 
   if [ ! -f $HELM_REPO_CRT_FILE ]; then
     echo "placing base64 encoded helm crt in $HELM_REPO_CRT_FILE"
+    mkdir -p $CERTIFICATES_LOCATION/helm
     echo $HELM_REPO_CRT | base64 -d > $HELM_REPO_CRT_FILE
   fi
 
   if [ ! -f $HELM_REPO_KEY_FILE ]; then
     echo "placing base64 encoded helm key in $KUBE_CA_KEY_FILE"
+    mkdir -p $CERTIFICATES_LOCATION/helm
     echo $HELM_REPO_KEY | base64 -d > $HELM_REPO_KEY_FILE
   fi
 
