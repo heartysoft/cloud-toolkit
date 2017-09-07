@@ -104,7 +104,7 @@ function publish_chart {
 
   echo "preparing chart..."
 
-  vars_to_replace="\$VERSION"
+  vars_to_replace="\$REPOSITORY,\$TAG,\$VERSION"
 
   __replace_values $vars_to_replace $CHART/Chart.yaml
   __replace_values $vars_to_replace $CHART/values.yaml
