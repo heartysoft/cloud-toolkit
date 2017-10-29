@@ -1,8 +1,8 @@
 #!/bin/sh
 
-BASEDIR=$(dirname "$0")
+set -e
 
-. $BASEDIR/kubernetes-functions.sh
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/kubernetes-functions.sh"
 
 configure_helm () {
   CERTIFICATES_LOCATION=${CERTIFICATES_LOCATION:-"/usr/local/certificates"}

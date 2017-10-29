@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 configure_kubernetes () {
   #defensive.. kubectl --from-file adds trailing newline
   KUBE_TOKEN=`echo -n $KUBE_TOKEN` 
