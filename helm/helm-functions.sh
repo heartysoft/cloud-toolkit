@@ -54,9 +54,9 @@ package_chart () {
 #
 release_chart () {
   if [ -z $4 ]; then
-    helm upgrade --install --namespace $1 --debug --wait $2 $3
+    helm upgrade --install --namespace $1 --debug $2 $3
   else
-    helm upgrade --install --namespace $1 --version $4 --debug --wait $2 $3
+    helm upgrade --install --namespace $1 --version $4 --debug $2 $3
   fi
 }
 
