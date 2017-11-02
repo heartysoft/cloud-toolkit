@@ -50,7 +50,7 @@ package_chart () {
 # $1 - namespace, i.e. default
 # $2 - release name, i.e. mychart-dev
 # $3 - chart to deploy, i.e. ./helm/mycart or helmet/mychart
-# $4 - path to values override file, i.e. ./my-values.yaml
+# $4 [Optional] - Path to values override file, i.e. ./my-values.yaml
 #
 release_chart_from_filesystem () {
   if [ -z $4 ]; then
@@ -59,11 +59,12 @@ release_chart_from_filesystem () {
     helm upgrade --install --namespace $1 -f $4 --debug$2 $3
   fi
 }
+
 # $1 - namespace, i.e. default
 # $2 - release name, i.e. mychart-dev
 # $3 - chart to deploy, i.e. helmet/mychart
 # $4 - version, i.e. 1.0.3
-# $5 - path to values override file, i.e. ./my-values.yaml
+# $5 [Optional] - Path to values override file, i.e. ./my-values.yaml
 #
 release_chart_from_repo () {
   if [ -z $5 ]; then
@@ -89,21 +90,16 @@ upload_chart () {
 # $2 - release name, i.e. mychart-dev
 # $3 - chart to deploy, i.e. ./helm/mycart or helmet/mychart
 # $4 - timeout in secs, i.e 30
-#S
+# $5 [Optional] - Path to values override file, i.e. ./my-values.yaml
+#
 validate_chart () {
   set -e
 
   NAME="$2-test-$(date +%s)"
 
-  release_chart $1 $NAME $3
+  release_chart_from_filesystem $1 $NAME $3 $5
 
-  HELM_COMMAND="helm test $NAME --cleanup"
-
-  if [ -n "$4" ]; then
-    HELM_COMMAND="$HELM_COMMAND --timeout $4"
-  fi
-
-  eval $HELM_COMMAND
+  helm test $NAME --cleanup --timeout $4
 
   helm delete --purge $NAME
 }
