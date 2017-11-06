@@ -54,9 +54,9 @@ package_chart () {
 #
 release_chart_from_filesystem () {
   if [ -z $4 ]; then
-    helm upgrade --install --namespace $1 --debug $2 $3
+    helm upgrade --install --recreate-pods --namespace $1 --debug $2 $3
   else
-    helm upgrade --install --namespace $1 -f $4 --debug $2 $3
+    helm upgrade --install --recreate-pods --namespace $1 -f $4 --debug $2 $3
   fi
 }
 
@@ -68,9 +68,9 @@ release_chart_from_filesystem () {
 #
 release_chart_from_repo () {
   if [ -z $5 ]; then
-    helm upgrade --install --namespace $1 --version $4 --debug $2 $3
+    helm upgrade --install --recreate-pods --namespace $1 --version $4 --debug $2 $3
   else
-    helm upgrade --install --namespace $1 -f $5 --version $4 --debug $2 $3
+    helm upgrade --install --recreate-pods --namespace $1 -f $5 --version $4 --debug $2 $3
   fi
 }
 
