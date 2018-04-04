@@ -50,5 +50,5 @@ configure_aws () {
 }
 
 login_to_aws () {
-  $(aws ecr get-login --profile builder)
+  $(aws ecr get-login --profile builder --no-include-email)
 }
