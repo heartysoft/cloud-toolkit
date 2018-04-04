@@ -47,30 +47,60 @@ package_chart () {
   helm package $1
 }
 
-# $1 - namespace, i.e. default
-# $2 - release name, i.e. mychart-dev
-# $3 - chart to deploy, i.e. ./helm/mycart or helmet/mychart
-# $4 [Optional] - Path to values override file, i.e. ./my-values.yaml
+# $1 - tiller namespace, i.e. kube-system
+# $2 - namespace, i.e. default
+# $3 - release name, i.e. mychart-dev
+# $4 - chart to deploy, i.e. ./helm/mycart or helmet/mychart
+# $5 [Optional] - Path to values override file, i.e. ./my-values.yaml
 #
 release_chart_from_filesystem () {
-  if [ -z $4 ]; then
-    helm upgrade --install --recreate-pods --namespace $1 --debug $2 $3
+  if [ -z $5 ]; then
+    helm --debug \
+         --tiller-namespace $1 \
+         upgrade --install \
+         --recreate-pods \
+         --namespace $2 \
+         $3 \
+         $4
   else
-    helm upgrade --install --recreate-pods --namespace $1 -f $4 --debug $2 $3
+    helm --debug \
+         --tiller-namespace $1 \
+         upgrade --install \
+         --recreate-pods \
+         --namespace $2 \
+         -f $5 \
+         $3 \
+         $4
   fi
 }
 
 # $1 - namespace, i.e. default
-# $2 - release name, i.e. mychart-dev
-# $3 - chart to deploy, i.e. helmet/mychart
-# $4 - version, i.e. 1.0.3
-# $5 [Optional] - Path to values override file, i.e. ./my-values.yaml
+# $2 - namespace, i.e. default
+# $3 - release name, i.e. mychart-dev
+# $4 - chart to deploy, i.e. helmet/mychart
+# $5 - version, i.e. 1.0.3
+# $6 [Optional] - Path to values override file, i.e. ./my-values.yaml
 #
 release_chart_from_repo () {
-  if [ -z $5 ]; then
-    helm upgrade --install --recreate-pods --namespace $1 --version $4 --debug $2 $3
+  if [ -z $6 ]; then
+    helm --debug \
+         --tiller-namespace $1 \
+         upgrade --install \
+         --recreate-pods \
+         --namespace $2 \
+         --version $5 \
+         $3 \
+         $4
   else
-    helm upgrade --install --recreate-pods --namespace $1 -f $5 --version $4 --debug $2 $3
+    helm --debug \
+         --tiller-namespace $1 \
+         upgrade --install \
+         --recreate-pods \
+         --namespace $2 \
+         -f $6 \
+         --version $5 \
+         $3 \
+         $4
   fi
 }
 
