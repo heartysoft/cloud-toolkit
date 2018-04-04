@@ -2,6 +2,14 @@
 
 set -e
 
+# $1 - environment, i.e. dev, prod
+#
+export_vault_confg() {
+  ENV = $( echo "$1" | tr -s  '[:lower:]'  '[:upper:]' )
+  export VAULT_ADDR=$(eval echo $"VAULT_ADDR_$ENV")
+  export VAULT_TOKEN=$(eval echo $"VAULT_TOKEN_$ENV")
+}
+
 # $1 - product group
 #
 read_amazon_ecr_environment () {
@@ -39,6 +47,8 @@ read_helm_environment () {
 read_kubernetes_environment () {
   read_secret "secret/$1/kubernetes/$2/certificate"
   export KUBE_CA_PEM=$secret_value
+  read_secret "secret/$1/kubernetes/$2/namespace"
+  export KUBE_NAMESPACE=$secret_value
   read_secret "secret/$1/kubernetes/$2/token"
   export KUBE_TOKEN=$secret_value
   read_secret "secret/$1/kubernetes/$2/url"
@@ -46,7 +56,6 @@ read_kubernetes_environment () {
 }
 
 # $1 - path to secret with want to read
-#
 read_secret () { 
   secret_value=`curl -s -H "X-Vault-Token:$VAULT_TOKEN" "$VAULT_ADDR/v1/$1" | jq --raw-output '.data.value'`
   [[ ! -z $secret_value ]]
