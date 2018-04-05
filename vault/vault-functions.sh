@@ -5,9 +5,15 @@ set -e
 # $1 - environment, i.e. dev, prod
 #
 export_vault_config() {
-  ENV=$( echo "$1" | tr -s  '[:lower:]'  '[:upper:]' )
-  export VAULT_ADDR=$(eval echo $"VAULT_ADDR_$ENV")
-  export VAULT_TOKEN=$(eval echo $"VAULT_TOKEN_$ENV")
+  ENV=$(echo "$1" | tr '[:lower:]'  '[:upper:]' )
+  ADDR=$(eval "echo \$VAULT_ADDR_$ENV")
+  TOKEN=$(eval "echo \$VAULT_TOKEN_$ENV")
+  if [ -n "$ADDR" ]; then
+    export VAULT_ADDR=$ADDR
+  fi
+  if [ -n "$TOKEN" ]; then
+    export VAULT_TOKEN=$TOKEN
+  fi
 }
 
 # $1 - product group
