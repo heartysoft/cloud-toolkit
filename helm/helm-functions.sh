@@ -59,6 +59,7 @@ release_chart_from_filesystem () {
          --tiller-namespace $1 \
          upgrade --install \
          --recreate-pods \
+         --wait \
          --namespace $2 \
          $3 \
          $4
@@ -67,6 +68,7 @@ release_chart_from_filesystem () {
          --tiller-namespace $1 \
          upgrade --install \
          --recreate-pods \
+         --wait \
          --namespace $2 \
          -f $5 \
          $3 \
@@ -87,6 +89,7 @@ release_chart_from_repo () {
          --tiller-namespace $1 \
          upgrade --install \
          --recreate-pods \
+         --wait \
          --namespace $2 \
          --version $5 \
          $3 \
@@ -96,6 +99,7 @@ release_chart_from_repo () {
          --tiller-namespace $1 \
          upgrade --install \
          --recreate-pods \
+         --wait \
          --namespace $2 \
          -f $6 \
          --version $5 \
